@@ -1,15 +1,13 @@
 # Simi
 
-* [How to use](#howtouse)
-* [Components](#components)
-    * [HTTP](#http)
+* [快速开始](#快速开始)
+* [API调用样例](#API调用样例)
+    * [网络访问](#网络访问)
 
 
-## How to use
+## 快速开始
 
-If you want use this library, you only have to download Simi project, import it into your workspace and add the project as a library in your android project settings.
-
-If you prefer it, you can use the gradle dependency, you have to add these lines in your build.gradle file:
+使用Android Studio并在build.gradle中添加：
 
 ```xml
 repositories {
@@ -21,18 +19,22 @@ dependencies {
 }
 ```
 
-##Components
+##API调用样例
 
-####HTTP
+####网络访问
 ```xml
 //生成异步网络访问参数实例
 HttpParams params = new HttpParams();
+
 //添加参数，支持基础类型与String、List等
 params.put("name", "Selly");
+
 //生成异步网络客户端实例
 HttpClient client = new HttpClient();
+
 //开启调试模式
 client.setDebugMode(true);
+
 //发起POST类型访问
 cliend.newTask(HTTP.POST, "http://xxx.com/register", params, new OnHttpResponseListener() {
     @Override
