@@ -1,4 +1,4 @@
-package io.simi.http;
+package io.simi.norm;
 
 /**
  * -------------------------------
@@ -6,7 +6,7 @@ package io.simi.http;
  * -------------------------------
  *
  * createTime: 2015-04-11
- * updateTime: 2015-04-11
+ * updateTime: 2015-04-12
  *
  */
 public enum HTTP {

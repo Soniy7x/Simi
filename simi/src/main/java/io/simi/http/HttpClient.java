@@ -2,6 +2,9 @@ package io.simi.http;
 
 import android.text.TextUtils;
 
+import io.simi.listener.OnHttpResponseListener;
+import io.simi.norm.HTTP;
+
 /**
  * -------------------------------
  * 		    HttpClient

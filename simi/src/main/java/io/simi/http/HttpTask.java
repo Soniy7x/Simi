@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import io.simi.listener.OnHttpResponseListener;
+import io.simi.norm.HTTP;
+
 /**
  * -------------------------------
  * 	        HttpTask
