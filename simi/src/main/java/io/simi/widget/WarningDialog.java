@@ -5,12 +5,14 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -22,6 +24,15 @@ import io.simi.norm.LEVEL;
 import io.simi.utils.FontAwesome;
 import io.simi.utils.Unit;
 
+/**
+ * -------------------------------
+ * 		   WarningDialog
+ * -------------------------------
+ *
+ * createTime: 2015-04-12
+ * updateTime: 2015-04-12
+ *
+ */
 @SuppressLint("ValidFragment")
 public class WarningDialog extends DialogFragment{
 
@@ -74,11 +85,9 @@ public class WarningDialog extends DialogFragment{
         this.onDismissListener = onDismissListener;
     }
 
-    public void setWarningIcon(FONT_AWESOME icon) {
+    public void setCustomerType(FONT_AWESOME icon, int color) {
         this.icon = icon;
-        if (mWarningIcon != null && icon != null) {
-            FontAwesome.getInstance(mContext).setText(mWarningIcon, icon);
-        }
+        this.color = color;
     }
 
     @Override
@@ -95,10 +104,9 @@ public class WarningDialog extends DialogFragment{
         int iconId = Unit.generateViewId();
         int titleId = Unit.generateViewId();
         int contentId = Unit.generateViewId();
-        int buttonId = Unit.generateViewId();
 
         LayoutParams params;
-        params = new RelativeLayout.LayoutParams(72 * DP, 72 * DP);
+        params = new LayoutParams(72 * DP, 72 * DP);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
         params.setMargins(0, 42 * DP, 0, 0);
         mWarningIcon = new TextView(mContext);
@@ -109,10 +117,10 @@ public class WarningDialog extends DialogFragment{
         mWarningIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
         mWarningIcon.setBackgroundDrawable(Image.createDrawable(color, 36 * DP));
         if (icon != null) {
-            setWarningIcon(icon);
+            FontAwesome.getInstance(mContext).setText(mWarningIcon, icon);
         }
 
-        params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, iconId);
         params.setMargins(0, 22 * DP, 0, 0);
@@ -125,7 +133,7 @@ public class WarningDialog extends DialogFragment{
         mWarningTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
         mWarningTitle.getPaint().setFakeBoldText(true);
 
-        params = new RelativeLayout.LayoutParams(240 * DP, LayoutParams.WRAP_CONTENT);
+        params = new LayoutParams(240 * DP, LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, titleId);
         params.setMargins(0, 16 * DP, 0, 0);
@@ -138,19 +146,21 @@ public class WarningDialog extends DialogFragment{
         mWarningContent.setText(contentText);
         mWarningContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 
-        params = new RelativeLayout.LayoutParams(240 * DP, 10 * DP);
+        params = new LayoutParams(240 * DP, 10 * DP);
         params.addRule(RelativeLayout.BELOW, contentId);
         params.setMargins(0, 32 * DP, 0, 0);
         View mWarningView = new View(mContext);
         mWarningView.setLayoutParams(params);
         mWarningView.setBackgroundColor(color);
 
-        params = new RelativeLayout.LayoutParams(240 * DP, 64 * DP);
+        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.BELOW, contentId);
         params.setMargins(0, 32 * DP, 0, 0);
+        RippleLayout mWarningRevelLayout = new RippleLayout(mContext);
+        mWarningRevelLayout.setLayoutParams(params);
+
         mWarningButton = new TextView(mContext);
-        mWarningButton.setId(buttonId);
-        mWarningButton.setLayoutParams(params);
+        mWarningButton.setLayoutParams(new LinearLayout.LayoutParams(240 * DP, 64 * DP));
         mWarningButton.setGravity(Gravity.CENTER);
         mWarningButton.setTextColor(0xFFFFFFFF);
         mWarningButton.setText(buttonText);
@@ -160,18 +170,24 @@ public class WarningDialog extends DialogFragment{
         mWarningButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onDismissListener != null) {
-                    onDismissListener.onDismiss();
-                }
-                dismiss();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (onDismissListener != null) {
+                            onDismissListener.onDismiss();
+                        }
+                        dismiss();
+                    }
+                }, 320);
             }
         });
 
+        mWarningRevelLayout.addView(mWarningButton);
         rootView.addView(mWarningIcon);
         rootView.addView(mWarningTitle);
         rootView.addView(mWarningContent);
         rootView.addView(mWarningView);
-        rootView.addView(mWarningButton);
+        rootView.addView(mWarningRevelLayout);
 
         return rootView;
     }
