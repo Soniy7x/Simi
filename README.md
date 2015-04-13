@@ -154,7 +154,7 @@ StringUtils.isNumber(string);
 
 ######警告框
 
-![Warning Dialog](images/waningdialog.png)
+![Warning Dialog](images/warningdialog.png)
 ```xml
 //LEVEL:VERBOSE, INFO, WARNING, ERROR, CUSTOMER
 new WarningDialog(this, LEVEL.INFO, "恭喜", "主角等级提升１级！", "了解").show;
@@ -168,8 +168,8 @@ new WarningDialog(this, LEVEL.INFO, "恭喜", "主角等级提升１级！", "�
 }).show;
 
 //当然也可以选择自定义
-//具体支持的Icon请转到![Font Awesome Icon](http://fortawesome.github.io/Font-Awesome/icons/)
 WarningDialog dialog = new WarningDialog(this, LEVEL.CUSTOMER, "恭喜", "主角等级提升１级！", "了解");
 dialog.setCustomerType(FONT_AWESOME.FA_CHECK, 0xFF009EFC);
 dialog.show();
 ```
+######注：具体支持的图标请转到![Font Awesome Icon](http://fortawesome.github.io/Font-Awesome/icons/)
