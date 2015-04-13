@@ -7,11 +7,15 @@
     * [图片相关](#图片相关)
        * [基础转换 + v1.0.1](#基础转换)
        * [缓存下载 + v1.0.1](#缓存下载)
-    * [工具集合](#工具集合)
+    * [管理工具](#管理工具)
+       * [状态栏 + v1.0.3](#状态栏)
+    * [常规工具](#常规工具)
        * [字符处理 + v1.0.1](#字符处理)
 * [UI](#UI)
     * [对话框](#对话框)
        * [警告框 + v1.0.2](#警告框)
+    * [布局](#布局)
+       * [涟漪布局 + v1.0.3](#涟漪布局)
 
 ## 快速开始
 
@@ -125,7 +129,25 @@ mLoader.putBitmap(key, xxx, false);
 mLoader.loadBitmap(key);
 ```
 
-####工具集合
+####管理工具
+
+######状态栏
+
+![Colorful StatusBar](images/statusbar.png)
+```xml
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+   super.onCreate(savedInstanceState);
+   setContentView(R.layout.activity_main);
+   //支持0xfffffff颜色与Drawable图片
+   //颜色可以通过getResource().getColor(R.color.XXX)获得
+   //图片可以通过getResource().getDrawable(R.drawable.xxx)获得
+   StatusBarManager.getInstance(this).setColor(0xFF009EFC);
+}
+```
+
+
+####常规工具
 
 ######字符处理
 ```xml
@@ -172,4 +194,19 @@ WarningDialog dialog = new WarningDialog(this, LEVEL.CUSTOMER, "恭喜", "主角
 dialog.setCustomerType(FONT_AWESOME.FA_CHECK, 0xFF009EFC);
 dialog.show();
 ```
-######注：具体支持的图标请转到![Font Awesome Icon](http://fortawesome.github.io/Font-Awesome/icons/)
+######注：具体支持的图标请转到![Font Awesome Icon](http://fortawesome.github.io/Font-Awesome/icons/#new)
+
+
+####布局
+
+######涟漪布局
+
+该布局继承于LinearLayout
+```xml
+<io.simi.widget.RippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+</io.simi.widget.RippleLayout>
+```
