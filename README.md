@@ -19,7 +19,7 @@
 
 ## 快速开始
 
-#### Android Studio
+###### Android Studio
 在build.gradle中添加：
 
 ```xml
@@ -27,12 +27,12 @@ dependencies {
     compile 'io.simi:simi:1.0.3'
 }
 ```
-#### Eclipse
-下载simi-v1.0.3.jar拷贝到工程目录/libs下
-
-下载FontAwesome字体![下载地址](http://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.3.0.zip)
-
-工程目录/assets下新建目录/fonts并拷贝FontAwesome字体到fonts/下重命名为:fontawesome.ttf
+###### Eclipse
+```xml
+1. 下载simi-v1.0.3.jar拷贝到工程目录/libs下
+2. 下载FontAwesome字体(http://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.3.0.zip)
+3. 工程目录/assets下新建目录/fonts并拷贝FontAwesome字体到fonts/下重命名为:fontawesome.ttf
+```
 
 ##API
 
@@ -201,7 +201,7 @@ WarningDialog dialog = new WarningDialog(this, LEVEL.CUSTOMER, "恭喜", "主角
 dialog.setCustomerType(FONT_AWESOME.FA_CHECK, 0xFF009EFC);
 dialog.show();
 ```
-######注：具体支持的图标请转到![Font Awesome Icon](http://fortawesome.github.io/Font-Awesome/icons/#new)
+######注：具体支持的图标请转到Font Awesome Icon(http://fortawesome.github.io/Font-Awesome/icons/#new)
 
 
 ####布局
