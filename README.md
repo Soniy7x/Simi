@@ -14,6 +14,7 @@
 * [UI](#UI)
     * [对话框](#对话框)
        * [警告框 + v1.0.2](#警告框)
+       * [简单对话框 + v1.0.4](#简单对话框)
     * [布局](#布局)
        * [涟漪布局 + v1.0.3](#涟漪布局)
 
@@ -24,12 +25,12 @@
 
 ```xml
 dependencies {
-    compile 'io.simi:simi:1.0.3'
+    compile 'io.simi:simi:1.0.4'
 }
 ```
 ###### Eclipse
 ```xml
-1. 下载simi-v1.0.3.jar拷贝到工程目录/libs下
+1. 下载simi-v1.0.4.jar拷贝到工程目录/libs下
 2. 下载FontAwesome字体(http://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.3.0.zip)
 3. 工程目录/assets下新建目录/fonts并拷贝FontAwesome字体到fonts/下重命名为:fontawesome.ttf
 ```
@@ -149,7 +150,7 @@ protected void onCreate(Bundle savedInstanceState) {
    //支持0xfffffff颜色与Drawable图片
    //颜色可以通过getResource().getColor(R.color.XXX)获得
    //图片可以通过getResource().getDrawable(R.drawable.xxx)获得
-   StatusBarManager.getInstance(this).setColor(0xFF009EFC);
+   new StatusBarManager(this).setColor(0xFF009EFC);
 }
 ```
 
@@ -202,6 +203,31 @@ dialog.setCustomerType(FONT_AWESOME.FA_CHECK, 0xFF009EFC);
 dialog.show();
 ```
 ######注：具体支持的图标请转到Font Awesome Icon(http://fortawesome.github.io/Font-Awesome/icons/#new)
+
+######简单对话框
+
+![Simple Dialog](images/simpledialog.png)
+```xml
+//快速使用
+new SimpleDialog(this, "标题", "内容", "确认", new OnConfirmListener() {
+     @Override
+     public void onConfirm() {
+        //to do something...
+     }
+}).show();
+
+//具体使用
+//添加取消字样
+dialog.setCancelText("取消");
+
+//监听Dismiss
+dialog.setOnDismissListener(new OnDismissListener() {
+    @Override
+    public void onDismiss() {
+        //to do something...
+    }
+});
+```
 
 
 ####布局
