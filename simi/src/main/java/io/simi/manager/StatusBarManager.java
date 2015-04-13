@@ -8,6 +8,7 @@ import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -22,16 +23,18 @@ import android.widget.FrameLayout;
  */
 public class StatusBarManager {
 
-    private static StatusBarManager instance;
-    private static int mScreenOrientation = Configuration.ORIENTATION_PORTRAIT;
-
     private View mStatusBarView;
 
-    private StatusBarManager(Activity activity) {
-        if (activity.getWindow().getAttributes().flags == WindowManager.LayoutParams.FLAG_FULLSCREEN) {
-            return;
+    public StatusBarManager(Activity activity) {
+        Window mWindow = activity.getWindow();
+        if (mWindow.getAttributes().flags == WindowManager.LayoutParams.FLAG_FULLSCREEN) {
+            WindowManager.LayoutParams attrs = mWindow.getAttributes();
+            attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            mWindow.setAttributes(attrs);
+            mWindow.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
-        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        mWindow.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         ViewGroup mRootView = (ViewGroup) ((ViewGroup)activity.findViewById(android.R.id.content)).getChildAt(0);
         mRootView.setFitsSystemWindows(true);
         mRootView.setClipToPadding(false);
@@ -40,16 +43,7 @@ public class StatusBarManager {
         mStatusBarView = new View(activity);
         mStatusBarView.setLayoutParams(params);
         mStatusBarView.setBackgroundColor(0x99000000);
-        ((ViewGroup)activity.getWindow().getDecorView()).addView(mStatusBarView);
-    }
-
-    public static StatusBarManager getInstance(Activity activity) {
-        int currentOrientation = activity.getResources().getConfiguration().orientation;
-        if (instance == null || (mScreenOrientation != currentOrientation)) {
-            mScreenOrientation = currentOrientation;
-            instance = new StatusBarManager(activity);
-        }
-        return instance;
+        ((ViewGroup)mWindow.getDecorView()).addView(mStatusBarView);
     }
 
     public void setColor(int color) {
