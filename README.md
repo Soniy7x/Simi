@@ -19,13 +19,18 @@
 
 ## 快速开始
 
-使用Android Studio并在build.gradle中添加：
+#### Android Studio
+在build.gradle中添加：
 
 ```xml
 dependencies {
-    compile 'io.simi:simi:1.0.2'
+    compile 'io.simi:simi:1.0.3'
 }
 ```
+#### Eclipse
+下载simi-v1.0.3.jar拷贝到工程目录/libs下
+下载FontAwesome字体![下载地址](http://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.3.0.zip)
+工程目录/assets下新建目录/fonts并拷贝FontAwesome字体到fonts/下重命名为:fontawesome.ttf
 
 ##API
 
