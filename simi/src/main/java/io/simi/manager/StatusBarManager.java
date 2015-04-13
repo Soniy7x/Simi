@@ -28,6 +28,9 @@ public class StatusBarManager {
     private View mStatusBarView;
 
     private StatusBarManager(Activity activity) {
+        if (activity.getWindow().getAttributes().flags == WindowManager.LayoutParams.FLAG_FULLSCREEN) {
+            return;
+        }
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         ViewGroup mRootView = (ViewGroup) ((ViewGroup)activity.findViewById(android.R.id.content)).getChildAt(0);
         mRootView.setFitsSystemWindows(true);
