@@ -9,18 +9,17 @@
        * [缓存下载 + v1.0.1](#缓存下载)
     * [工具集合](#工具集合)
        * [字符处理 + v1.0.1](#字符处理)
+* [UI](#UI)
+    * [对话框](#对话框)
+       * [警告框 + v1.0.2](#警告框)
 
 ## 快速开始
 
 使用Android Studio并在build.gradle中添加：
 
 ```xml
-repositories {
-    jcenter()
-}
-
 dependencies {
-    compile 'io.simi:simi:1.0.1'
+    compile 'io.simi:simi:1.0.2'
 }
 ```
 
@@ -30,13 +29,13 @@ dependencies {
 
 ######异步请求
 ```xml
-//生成异步网络访问参数实例
+//创建异步网络访问参数实例
 HttpParams params = new HttpParams();
 
 //添加参数，支持基础类型与String、List等
 params.put("name", "Selly");
 
-//生成异步网络客户端实例
+//创建异步网络客户端实例
 HttpClient client = new HttpClient();
 
 //开启调试模式
@@ -148,3 +147,29 @@ StringUtils.isEmail(string);
 //检查字符串是否是纯数字
 StringUtils.isNumber(string);
 ```
+
+##UI
+
+####对话框
+
+######警告框
+
+![Warning Dialog](images/warningdialog.png)
+```xml
+//LEVEL:VERBOSE, INFO, WARNING, ERROR, CUSTOMER
+new WarningDialog(this, LEVEL.INFO, "恭喜", "主角等级提升１级！", "了解").show;
+
+//如果想要监听Dismiss
+new WarningDialog(this, LEVEL.INFO, "恭喜", "主角等级提升１级！", "了解", new OnDismissListener() {
+   @Override
+   public void onDismiss() {
+      //to do something...
+   }
+}).show;
+
+//当然也可以选择自定义
+WarningDialog dialog = new WarningDialog(this, LEVEL.CUSTOMER, "恭喜", "主角等级提升１级！", "了解");
+dialog.setCustomerType(FONT_AWESOME.FA_CHECK, 0xFF009EFC);
+dialog.show();
+```
+######注：具体支持的图标请转到![Font Awesome Icon](http://fortawesome.github.io/Font-Awesome/icons/)
