@@ -36,11 +36,6 @@ import io.simi.utils.Unit;
 @SuppressLint("ValidFragment")
 public class WarningDialog extends DialogFragment{
 
-    private TextView mWarningIcon;
-    private TextView mWarningTitle;
-    private TextView mWarningContent;
-    private TextView mWarningButton;
-
     private Context mContext;
     private FONT_AWESOME icon;
     private String titleText;
@@ -109,7 +104,7 @@ public class WarningDialog extends DialogFragment{
         params = new LayoutParams(72 * DP, 72 * DP);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
         params.setMargins(0, 42 * DP, 0, 0);
-        mWarningIcon = new TextView(mContext);
+        TextView mWarningIcon = new TextView(mContext);
         mWarningIcon.setId(iconId);
         mWarningIcon.setLayoutParams(params);
         mWarningIcon.setGravity(Gravity.CENTER);
@@ -124,7 +119,7 @@ public class WarningDialog extends DialogFragment{
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, iconId);
         params.setMargins(0, 22 * DP, 0, 0);
-        mWarningTitle = new TextView(mContext);
+        TextView mWarningTitle = new TextView(mContext);
         mWarningTitle.setId(titleId);
         mWarningTitle.setLayoutParams(params);
         mWarningTitle.setGravity(Gravity.CENTER);
@@ -137,7 +132,7 @@ public class WarningDialog extends DialogFragment{
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.BELOW, titleId);
         params.setMargins(0, 16 * DP, 0, 0);
-        mWarningContent = new TextView(mContext);
+        TextView mWarningContent = new TextView(mContext);
         mWarningContent.setPadding(32 * DP, 0, 32 * DP, 0);
         mWarningContent.setId(contentId);
         mWarningContent.setLayoutParams(params);
@@ -159,7 +154,7 @@ public class WarningDialog extends DialogFragment{
         RippleLayout mWarningRevelLayout = new RippleLayout(mContext);
         mWarningRevelLayout.setLayoutParams(params);
 
-        mWarningButton = new TextView(mContext);
+        TextView mWarningButton = new TextView(mContext);
         mWarningButton.setLayoutParams(new LinearLayout.LayoutParams(240 * DP, 64 * DP));
         mWarningButton.setGravity(Gravity.CENTER);
         mWarningButton.setTextColor(0xFFFFFFFF);
