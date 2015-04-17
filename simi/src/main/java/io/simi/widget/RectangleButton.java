@@ -3,14 +3,24 @@ package io.simi.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 
-import io.simi.graphics.Image;
-import io.simi.utils.Constant;
+import io.simi.graphics.RectangleDrawable;
+import io.simi.utils.AttributeParser;
 import io.simi.utils.Unit;
 
+/**
+ * -------------------------------
+ * 		  RectangleButton
+ * -------------------------------
+ *
+ * createTime: 2015-04-16
+ * updateTime: 2015-04-17
+ *
+ */
 public class RectangleButton extends RippleView {
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -36,20 +46,20 @@ public class RectangleButton extends RippleView {
     public RectangleButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if (attrs != null) {
-            int textResource = attrs.getAttributeResourceValue(Constant.ANDROID_NAMESPACE, "text", -1);
-            text = textResource != -1 ? getResources().getString(textResource) : attrs.getAttributeValue(Constant.ANDROID_NAMESPACE, "text");
-            size = attrs.getAttributeIntValue(Constant.ANDROID_NAMESPACE, "textSize", 14);
-            int backgroundResource = attrs.getAttributeResourceValue(Constant.ANDROID_NAMESPACE, "background", -1);
-            if (backgroundResource != -1) {
-                setBackgroundColor(getResources().getColor(backgroundResource));
-            }else {
-                int backgroundColor = attrs.getAttributeIntValue(Constant.ANDROID_NAMESPACE, "background", -1);
-                if (backgroundColor != -1) {
-                    setBackgroundColor(backgroundColor);
-                }else {
+            text = AttributeParser.parserText(getContext(), attrs, "");
+            size = AttributeParser.parseTextSize(attrs, size);
+            AttributeParser.AttributeParserResult result = AttributeParser.parseBackground(attrs, color);
+            if (result.type == AttributeParser.TYPE_ID) {
+                try {
+                    setBackgroundColor(getResources().getColor(result.intValue));
+                }catch (Exception e) {
                     setBackgroundColor(color);
                 }
+            }else {
+                setBackgroundColor(result.intValue);
             }
+        }else {
+            setBackgroundColor(color);
         }
     }
 
@@ -72,7 +82,26 @@ public class RectangleButton extends RippleView {
     @Override
     public void setBackgroundColor(int color) {
         this.color = color;
-        super.setBackgroundDrawable(Image.createDrawable(color, 8));
+        super.setBackgroundDrawable(new RectangleDrawable(getContext(), 2 , 2, color));
+    }
+
+    @Override
+    public void setBackgroundResource(int resId) {}
+
+    @Override
+    public void setBackground(Drawable background) {}
+
+    @Override
+    public void setBackgroundDrawable(Drawable background) {}
+
+    @Override
+    protected float getShadowSize() {
+        return Unit.dp2pxReturnFloat(getContext(), 2);
+    }
+
+    @Override
+    protected float getRadiusSize() {
+        return Unit.dp2pxReturnFloat(getContext(), 2);
     }
 
     @Override
@@ -94,6 +123,6 @@ public class RectangleButton extends RippleView {
         }
         paint.setTextSize(Unit.dp2pxReturnFloat(getContext(), size));
         fontMetrics = paint.getFontMetrics();
-        canvas.drawText(text, width / 2, ((height - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top), paint);
+        canvas.drawText(text, mWidth / 2, ((mHeight - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top), paint);
     }
 }

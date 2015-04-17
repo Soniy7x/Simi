@@ -1,4 +1,4 @@
-package io.simi.test;
+package io.simi.graphics;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -19,14 +19,14 @@ import io.simi.utils.Unit;
 
 /**
  * -------------------------------
- * 			RectDrawable
+ * 			RectangleDrawable
  * -------------------------------
  *
  * createTime: 2015-04-15
- * updateTime: 2015-04-15
+ * updateTime: 2015-04-17
  *
  */
-public class RectDrawable extends Drawable{
+public class RectangleDrawable extends Drawable{
 
     private final static float SHADOW_MULTIPLIER = 1.5f;
     private final static int DEFAULT_BACKGROUND_COLOR = 0xFFFFFFFF;
@@ -46,19 +46,19 @@ public class RectDrawable extends Drawable{
     private Paint mCornerShadowPaint;
     private Paint mEdgeShadowPaint;
 
-    public RectDrawable(Context context) {
+    public RectangleDrawable(Context context) {
         this(context, 0);
     }
 
-    public RectDrawable(Context context, float radius) {
+    public RectangleDrawable(Context context, float radius) {
         this(context, radius, 0);
     }
 
-    public RectDrawable(Context context, float radius, float shadowSize) {
+    public RectangleDrawable(Context context, float radius, float shadowSize) {
         this(context, radius, shadowSize, 0);
     }
 
-    public RectDrawable(Context context, float radius, float shadowSize, int backgroundColor) {
+    public RectangleDrawable(Context context, float radius, float shadowSize, int backgroundColor) {
         DisplayMetrics mDisplayMetrics = context.getResources().getDisplayMetrics();
         this.mRadius = Unit.dp2pxReturnFloat(context, (int) (radius + .5f));
         this.mShadowOutsetSize = Unit.dp2pxReturnFloat(context, shadowSize);

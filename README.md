@@ -16,7 +16,8 @@
        * [警告框 + v1.0.2](#警告框)
        * [简单对话框 + v1.0.4](#简单对话框)
     * [组件](#组件)
-       * [无层次按钮 + v1.0.5](#无层次按钮)
+       * [平面按钮 + v1.0.5](#平面按钮)
+       * [矩形按钮 + v1.0.5](#矩形按钮)
     * [布局](#布局)
        * [涟漪布局 + v1.0.3](#涟漪布局)
 
@@ -56,7 +57,7 @@ HttpClient client = new HttpClient();
 client.setDebugMode(true);
 
 //发起POST类型访问
-cliend.newTask(HTTP.POST, "http://xxx.com/register", params, new OnHttpResponseListener() {
+client.newTask(HTTP.POST, "http://xxx.com/register", params, new OnHttpResponseListener() {
     @Override
     public void onSuccess(String response) {}
 
@@ -233,11 +234,23 @@ dialog.setOnDismissListener(new OnDismissListener() {
 
 ####组件
 
-######无层次按钮
+######平面按钮
 
 ![Flat Button](images/flatbutton.png)
 ```xml
 <io.simi.widget.FlatButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#1E88E5"
+    android:text="按钮"
+    android:textSize="16sp" />
+```
+
+######矩形按钮
+
+![Rectangle Button](images/rectanglebutton.png)
+```xml
+<io.simi.widget.RectangleButton
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#1E88E5"

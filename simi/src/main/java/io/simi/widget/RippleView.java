@@ -3,30 +3,42 @@ package io.simi.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.SystemClock;
+import android.graphics.Path;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 
-public class RippleView extends View{
+/**
+ * -------------------------------
+ * 		  RippleView
+ * -------------------------------
+ *
+ * createTime: 2015-04-16
+ * updateTime: 2015-04-17
+ *
+ */
+public class RippleView extends View implements Runnable{
 
-    private static final int INVALIDATE_DURATION = 60;
-    private static final int TAP_TIMEOUT = ViewConfiguration.getLongPressTimeout();
-    private static final Paint PAINT = new Paint();
+    private static final int INVALIDATE_DURATION = 40;
 
-    private boolean isPressed = false;
-    private long pressTime = 0;
-    private int increment = 10;
-    private int maxRadius;
-    private int shaderRadius;
-    private int eventX;
-    private int eventY;
-    protected int width;
-    protected int height;
+    private float mRippleCenterX;
+    private float mRippleCenterY;
+    private float mRippleRange;
+    private float mRippleRadius;
+    private float mRippleRadiusGap;
+    private float mRippleRadiusMax;
 
-    static {
-        PAINT.setColor(0x1B000000);
+    private Path mStrokePath = new Path();
+
+    protected float mWidth;
+    protected float mHeight;
+
+    private boolean isAnimated = false;
+    private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    {
+        mPaint.setColor(0x1B000000);
     }
 
     public RippleView(Context context) {
@@ -39,78 +51,109 @@ public class RippleView extends View{
 
     public RippleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setWillNotDraw(false);
+    }
+
+    protected float getShadowSize() {
+        return 0;
+    }
+
+    protected float getRadiusSize() {
+        return 0;
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        width = w;
-        height = h;
+    protected void onSizeChanged(int w, int h, int oldWidth, int oldHeight) {
+        super.onSizeChanged(w, h, oldWidth, oldHeight);
+        mWidth = w;
+        mHeight = h;
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public void run() {
+        super.performClick();
+    }
+
+    @Override
+    public boolean performClick() {
+        return true;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (!isEnabled()) {
+            return super.dispatchTouchEvent(event);
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (pressTime == 0) {
-                    pressTime = SystemClock.elapsedRealtime();
-                }
-                eventX = (int)event.getX();
-                eventY = (int)event.getY();
-                isPressed = true;
-                if(width > height) {
-                    if (eventX < width / 2) {
-                        maxRadius = width - eventX;
+                isAnimated = true;
+                mRippleCenterX = event.getX();
+                mRippleCenterY = event.getY();
+                mRippleRange = Math.min(mWidth, getMeasuredHeight());
+                mRippleRadius = 0;
+                mRippleRadiusGap = mRippleRange / 8;
+                if(mWidth > mHeight) {
+                    if (mRippleCenterX < mWidth / 2) {
+                        mRippleRadiusMax = mWidth - mRippleCenterX;
                     }else {
-                        maxRadius = width / 2 + eventX;
+                        mRippleRadiusMax = mWidth / 2 + mRippleCenterX;
                     }
                 }else {
-                    if (eventY < height / 2) {
-                        maxRadius = height - eventY;
+                    if (mRippleCenterY < mHeight / 2) {
+                        mRippleRadiusMax = mHeight - mRippleCenterY;
                     }else {
-                        maxRadius = height / 2 + eventY;
+                        mRippleRadiusMax = mHeight / 2 + mRippleCenterY;
                     }
                 }
                 postInvalidateDelayed(INVALIDATE_DURATION);
                 break;
             case MotionEvent.ACTION_UP:
+                postDelayed(this, INVALIDATE_DURATION * 2);
             case MotionEvent.ACTION_CANCEL:
-                if(SystemClock.elapsedRealtime() - pressTime < TAP_TIMEOUT){
-                    increment = 15;
-                    postInvalidate();
-                }else{
-                    resetStatus();
-                }
+                postInvalidateDelayed(INVALIDATE_DURATION);
                 break;
         }
-        return true;
+        return super.dispatchTouchEvent(event);
     }
-
-    private void resetStatus(){
-        isPressed = false;
-        increment = 10;
-        pressTime = 0;
-        shaderRadius = 0;
-        postInvalidate();
-    }
-
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-        if(!isPressed || !isEnabled() || !isClickable()) {
+        if (!isAnimated) {
             return;
         }
-        canvas.drawRect(0, 0, width, height, PAINT);
-        canvas.save();
-        canvas.clipRect(0, 0, width, height);
-        canvas.drawCircle(eventX, eventY, shaderRadius, PAINT);
-        canvas.restore();
-        if(shaderRadius < maxRadius){
-            postInvalidateDelayed(INVALIDATE_DURATION, 0, 0, width, height);
-            shaderRadius += increment;
-        }else{
-            resetStatus();
+        if (mRippleRadius > mRippleRange / 2) {
+            mRippleRadius += mRippleRadiusGap * 1;
+        }else {
+            mRippleRadius += mRippleRadiusGap;
         }
+        float mShadowSize = getShadowSize();
+        float mRadiusSize = getRadiusSize();
+        if (mShadowSize > 0 || mRadiusSize > 0) {
+            float left = mShadowSize;
+            float top = mShadowSize * 1.5F;
+            float right = mWidth - mShadowSize;
+            float bottom = mHeight - mShadowSize * 1.5F;
+            mStrokePath.moveTo(mShadowSize + mRadiusSize, top);
+            mStrokePath.lineTo(right - mRadiusSize, top);
+            RectF mStrokeRect = new RectF(right - mRadiusSize, top, right, mRadiusSize + top);
+            mStrokePath.arcTo(mStrokeRect, 270, 90, false);
+            mStrokePath.lineTo(right, bottom - mRadiusSize);
+            mStrokeRect = new RectF(right - mRadiusSize, bottom - mRadiusSize, right, bottom);
+            mStrokePath.arcTo(mStrokeRect, 0, 90, false);
+            mStrokePath.lineTo(left + mRadiusSize, bottom);
+            mStrokeRect = new RectF(left, bottom - mRadiusSize, left +mRadiusSize, bottom);
+            mStrokePath.arcTo(mStrokeRect, 90, 90, false);
+            mStrokePath.lineTo(left, top + mRadiusSize);
+            mStrokeRect = new RectF(left, top, mRadiusSize + left,  mRadiusSize + top);
+            mStrokePath.arcTo(mStrokeRect, 180, 90, false);
+        }
+        canvas.save();
+        canvas.clipPath(mStrokePath);
+        canvas.drawCircle(mRippleCenterX, mRippleCenterY, mRippleRadius, mPaint);
+        canvas.restore();
+        if (mRippleRadius > mRippleRadiusMax) {
+            isAnimated = false;
+        }
+        postInvalidateDelayed(INVALIDATE_DURATION, 0, 0, (int)mWidth, (int)mHeight);
     }
-
 }

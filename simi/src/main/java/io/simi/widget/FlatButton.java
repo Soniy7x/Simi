@@ -1,17 +1,16 @@
 package io.simi.widget;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import io.simi.graphics.Image;
-import io.simi.utils.Constant;
+import io.simi.graphics.RectangleDrawable;
+import io.simi.utils.AttributeParser;
 import io.simi.utils.Unit;
 
 /**
@@ -20,15 +19,22 @@ import io.simi.utils.Unit;
  * -------------------------------
  *
  * createTime: 2015-04-15
- * updateTime: 2015-04-15
+ * updateTime: 2015-04-17
  *
  */
-public class FlatButton extends RippleLayout {
+public class FlatButton extends RippleView {
 
+    private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private String text;
-    private TextView textView;
+    private int textSize;
     private int color = 0xFF1E88E5;
-    private OnClickListener onClickListener;
+    private Paint.FontMetrics fontMetrics;
+
+    {
+        paint.setColor(color);
+        paint.setFakeBoldText(true);
+        paint.setTextAlign(Paint.Align.CENTER);
+    }
 
     public FlatButton(Context context) {
         this(context, null);
@@ -40,37 +46,23 @@ public class FlatButton extends RippleLayout {
 
     public FlatButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        textView = new TextView(getContext());
-        textView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        textView.setGravity(Gravity.CENTER);
-        textView.getPaint().setFakeBoldText(true);
-        addView(textView);
         if (attrs != null) {
-            int textResource = attrs.getAttributeResourceValue(Constant.ANDROID_NAMESPACE, "text", -1);
-            text = textResource != -1 ? getResources().getString(textResource) : attrs.getAttributeValue(Constant.ANDROID_NAMESPACE, "text");
-            textView.setText(text == null ? "" : text);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, attrs.getAttributeIntValue(Constant.ANDROID_NAMESPACE, "textSize", 16));
-            int backgroundResource = attrs.getAttributeResourceValue(Constant.ANDROID_NAMESPACE, "background", -1);
-            if (backgroundResource != -1) {
-                setBackgroundColor(getResources().getColor(backgroundResource));
+            text = AttributeParser.parserText(getContext(), attrs, "");
+            textSize = AttributeParser.parseTextSize(attrs, 14);
+            AttributeParser.AttributeParserResult result = AttributeParser.parseBackground(attrs, color);
+            if (result.type == AttributeParser.TYPE_ID) {
+                try {
+                    setBackgroundColor(getResources().getColor(result.intValue));
+                }catch (Exception e) {
+                    setBackgroundColor(color);
+                }
             }else {
-                int backgroundColor = attrs.getAttributeIntValue(Constant.ANDROID_NAMESPACE, "background", -1);
-                if (backgroundColor != -1) {
-                    setBackgroundColor(backgroundColor);
-                }else {
-                    textView.setTextColor(color);
-                }
+                setBackgroundColor(result.intValue);
             }
+        }else {
+            setBackgroundColor(color);
         }
-        super.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onClickListener != null) {
-                    onClickListener.onClick(v);
-                }
-            }
-        });
-        Drawable background = Image.createDrawable(0x00000000, 8);
+        Drawable background = new RectangleDrawable(getContext(), 2);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             super.setBackground(background);
         }else {
@@ -79,21 +71,17 @@ public class FlatButton extends RippleLayout {
     }
 
     @Override
-    public void setOnClickListener(OnClickListener listener) {
-        onClickListener = listener;
+    protected float getRadiusSize() {
+        return Unit.dp2pxReturnFloat(getContext(), 2);
     }
 
     @Override
     public void setBackgroundColor(int color) {
         this.color = color;
-        textView.setTextColor(color);
     }
 
     public void setText(String text) {
-        if (text != null) {
-            this.text = text;
-            textView.setText(this.text);
-        }
+        this.text = text;
     }
 
     public String getText() {
@@ -105,31 +93,18 @@ public class FlatButton extends RippleLayout {
     }
 
     public void setTextSize(int size) {
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
-    }
-
-    public TextView getTextView() {
-        return  textView;
+        this.textSize = size;
     }
 
     @Override
     public void setLayoutParams(ViewGroup.LayoutParams params) {
-        int paddingHorizontal = Unit.dp2px(getContext(), 32);
-        int paddingVertical = Unit.dp2px(getContext(), 16);
-        int paddingLeft = getPaddingLeft();
-        int paddingRight = getPaddingRight();
-        int paddingTop = getPaddingTop();
-        int paddingBottom = getPaddingBottom();
         if (params.width == -2) {
-            paddingLeft = paddingLeft == 0 ? paddingHorizontal : paddingLeft;
-            paddingRight = paddingRight == 0 ? paddingHorizontal : paddingRight;
+            params.width = Unit.dp2px(getContext(), 96);
         }
         if (params.height == -2) {
-            paddingTop = paddingTop == 0 ? paddingVertical : paddingTop;
-            paddingBottom = paddingBottom == 0 ? paddingVertical : paddingBottom;
+            params.height = Unit.dp2px(getContext(), 48);
         }
         super.setLayoutParams(params);
-        setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
     }
 
     @Override
@@ -140,4 +115,16 @@ public class FlatButton extends RippleLayout {
 
     @Override
     public void setBackgroundResource(int resId) {}
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (TextUtils.isEmpty(text)) {
+            return;
+        }
+        paint.setColor(color);
+        paint.setTextSize(Unit.dp2pxReturnFloat(getContext(), textSize));
+        fontMetrics = paint.getFontMetrics();
+        canvas.drawText(text, mWidth / 2, ((mHeight - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top), paint);
+    }
 }
