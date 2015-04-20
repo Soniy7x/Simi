@@ -18,6 +18,7 @@
     * [组件](#组件)
        * [平面按钮 + v1.0.5](#平面按钮)
        * [矩形按钮 + v1.0.5](#矩形按钮)
+       * [图角视图 + v1.0.5](#图角视图)
     * [布局](#布局)
        * [视图控制器 + v1.0.5](#视图控制器)
        * [涟漪布局 + v1.0.3](#涟漪布局)
@@ -258,6 +259,31 @@ dialog.setOnDismissListener(new OnDismissListener() {
     android:textSize="16sp" />
 ```
 
+######圆角视图
+
+![Image Round View](images/imageroundview.png)
+
+使用说明：
+```xml
+1. 该布局拥有自定义属性，使用时需要在XML的根布局下添加：xmlns:simi="http://schemas.android.com/simi"
+2. 该布局支持的自定义属性如下：
+    * simi:radius="12" （圆角大小）
+    * simi:circleMode="true" （是否开启圆形模式，true开启后圆角属性无效）
+```
+XML布局使用示例
+```xml
+<io.simi.widget.ImageRoundView
+    android:layout_width="96dp"
+    android:layout_height="96dp"
+    android:src="@drawable/img"
+    simi:radius="12" />
+
+<io.simi.widget.ImageRoundView
+    android:layout_width="96dp"
+    android:layout_height="96dp"
+    android:src="@drawable/img"
+    simi:circleMode="true" />
+```
 ####布局
 
 ######视图控制器

@@ -22,6 +22,22 @@ public class AttributeParser {
     public static final int TYPE_ID = 1;
     public static final int TYPE_VALUE = 2;
 
+    public static int parserRadius(String namespace, AttributeSet attrs) {
+        return attrs.getAttributeIntValue(namespace, "radius", 0);
+    }
+
+    public static boolean parserCircleMode(String namespace, AttributeSet attrs) {
+        return attrs.getAttributeBooleanValue(namespace, "circleMode", false);
+    }
+
+    public static int parserSrc(String namespace, AttributeSet attrs) {
+        int resId = attrs.getAttributeResourceValue(namespace, "src", FAILED);
+        if (resId != FAILED) {
+            return resId;
+        }
+        return -1;
+    }
+
     public static String parserType(Context context, String namespace, AttributeSet attrs, String defaultText) {
         int resId = attrs.getAttributeResourceValue(namespace, "text", FAILED);
         if (resId != FAILED) {
