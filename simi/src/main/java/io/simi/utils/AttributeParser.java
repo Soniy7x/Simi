@@ -11,22 +11,23 @@ import android.util.AttributeSet;
  * -------------------------------
  *
  * createTime: 2015-04-17
- * updateTime: 2015-04-17
+ * updateTime: 2015-04-20
  *
  */
 public class AttributeParser {
 
     public static final String ANDROID_NAMESPACE = "http://schemas.android.com/apk/res/android";
+    public static final String SIMI_NAMESPACE = "http://schemas.android.com/simi";
     public static final int FAILED = -1;
     public static final int TYPE_ID = 1;
     public static final int TYPE_VALUE = 2;
 
-    public static String parserText(Context context, AttributeSet attrs, String defaultText) {
-        int resId = attrs.getAttributeResourceValue(ANDROID_NAMESPACE, "text", FAILED);
+    public static String parserType(Context context, String namespace, AttributeSet attrs, String defaultText) {
+        int resId = attrs.getAttributeResourceValue(namespace, "text", FAILED);
         if (resId != FAILED) {
             return context.getResources().getString(resId);
         }else {
-            String text = attrs.getAttributeValue(ANDROID_NAMESPACE, "text");
+            String text = attrs.getAttributeValue(namespace, "text");
             if (TextUtils.isEmpty(text)) {
                 return defaultText;
             } else {
@@ -35,20 +36,149 @@ public class AttributeParser {
         }
     }
 
-    public static int parseTextSize(AttributeSet attrs, int defaultTextSize) {
-        return attrs.getAttributeIntValue(ANDROID_NAMESPACE, "textSize", defaultTextSize);
+    public static int parseNavigatorColor(Context context, String namespace, AttributeSet attrs, int defaultColor) {
+        int resId = attrs.getAttributeResourceValue(namespace, "navigatorColor", FAILED);
+        if (resId != FAILED) {
+            try {
+                return  context.getResources().getColor(resId);
+            }catch (Exception e) {
+                return defaultColor;
+            }
+        }else {
+            int color = attrs.getAttributeIntValue(namespace, "navigatorColor", FAILED);
+            if (color != FAILED) {
+                return color;
+            }else {
+                String colorString = attrs.getAttributeValue(namespace, "navigatorColor");
+                if (TextUtils.isEmpty(colorString)) {
+                    return defaultColor;
+                }else {
+                    return Color.parseColor(colorString);
+                }
+            }
+        }
     }
 
-    public static AttributeParserResult parseBackground(AttributeSet attrs, int defaultColor) {
-        int resId = attrs.getAttributeResourceValue(ANDROID_NAMESPACE, "background", FAILED);
+    public static int parseContentColor(Context context, String namespace, AttributeSet attrs, int defaultColor) {
+        int resId = attrs.getAttributeResourceValue(namespace, "contentColor", FAILED);
+        if (resId != FAILED) {
+            try {
+                return  context.getResources().getColor(resId);
+            }catch (Exception e) {
+                return defaultColor;
+            }
+        }else {
+            int color = attrs.getAttributeIntValue(namespace, "contentColor", FAILED);
+            if (color != FAILED) {
+                return color;
+            }else {
+                String colorString = attrs.getAttributeValue(namespace, "contentColor");
+                if (TextUtils.isEmpty(colorString)) {
+                    return defaultColor;
+                }else {
+                    return Color.parseColor(colorString);
+                }
+            }
+        }
+    }
+
+    public static int parseTextColor(Context context, String namespace, AttributeSet attrs, int defaultColor) {
+        int resId = attrs.getAttributeResourceValue(namespace, "textColor", FAILED);
+        if (resId != FAILED) {
+            try {
+                return  context.getResources().getColor(resId);
+            }catch (Exception e) {
+                return defaultColor;
+            }
+        }else {
+            int color = attrs.getAttributeIntValue(namespace, "textColor", FAILED);
+            if (color != FAILED) {
+                return color;
+            }else {
+                String colorString = attrs.getAttributeValue(namespace, "textColor");
+                if (TextUtils.isEmpty(colorString)) {
+                    return defaultColor;
+                }else {
+                    return Color.parseColor(colorString);
+                }
+            }
+        }
+    }
+
+    public static int parseTextSelectColor(Context context, String namespace, AttributeSet attrs, int defaultColor) {
+        int resId = attrs.getAttributeResourceValue(namespace, "textSelectColor", FAILED);
+        if (resId != FAILED) {
+            try {
+                return  context.getResources().getColor(resId);
+            }catch (Exception e) {
+                return defaultColor;
+            }
+        }else {
+            int color = attrs.getAttributeIntValue(namespace, "textSelectColor", FAILED);
+            if (color != FAILED) {
+                return color;
+            }else {
+                String colorString = attrs.getAttributeValue(namespace, "textSelectColor");
+                if (TextUtils.isEmpty(colorString)) {
+                    return defaultColor;
+                }else {
+                    return Color.parseColor(colorString);
+                }
+            }
+        }
+    }
+
+    public static int parseIndicatorColor(Context context, String namespace, AttributeSet attrs, int defaultColor) {
+        int resId = attrs.getAttributeResourceValue(namespace, "indicatorColor", FAILED);
+        if (resId != FAILED) {
+            try {
+                return  context.getResources().getColor(resId);
+            }catch (Exception e) {
+                return defaultColor;
+            }
+        }else {
+            int color = attrs.getAttributeIntValue(namespace, "indicatorColor", FAILED);
+            if (color != FAILED) {
+                return color;
+            }else {
+                String colorString = attrs.getAttributeValue(namespace, "indicatorColor");
+                if (TextUtils.isEmpty(colorString)) {
+                    return defaultColor;
+                }else {
+                    return Color.parseColor(colorString);
+                }
+            }
+        }
+    }
+
+    public static String parserText(Context context, String namespace, AttributeSet attrs, String defaultText) {
+        int resId = attrs.getAttributeResourceValue(namespace, "text", FAILED);
+        if (resId != FAILED) {
+            return context.getResources().getString(resId);
+        }else {
+            String text = attrs.getAttributeValue(namespace, "text");
+            if (TextUtils.isEmpty(text)) {
+                return defaultText;
+            } else {
+                return text;
+            }
+        }
+    }
+
+    public static int parseTextSize(String namespace, AttributeSet attrs, int defaultTextSize) {
+        return attrs.getAttributeIntValue(namespace, "textSize", defaultTextSize);
+    }
+
+    public static AttributeParserResult parseBackground(String namespace, AttributeSet attrs, int defaultColor) {
+        int resId = attrs.getAttributeResourceValue(namespace, "background", FAILED);
         if (resId != FAILED) {
             return new AttributeParserResult(TYPE_ID, resId);
         }else {
-            int color = attrs.getAttributeIntValue(ANDROID_NAMESPACE, "background", FAILED);
+            int color = attrs.getAttributeIntValue(namespace, "background", FAILED);
             if (color != FAILED) {
                 return new AttributeParserResult(TYPE_VALUE, color);
             }else {
-                String colorString = attrs.getAttributeValue(ANDROID_NAMESPACE, "background");
+                String colorString = attrs.getAttributeValue(namespace, "background");
                 if (TextUtils.isEmpty(colorString)) {
                     return new AttributeParserResult(TYPE_VALUE, defaultColor);
                 }else {

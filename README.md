@@ -19,21 +19,21 @@
        * [平面按钮 + v1.0.5](#平面按钮)
        * [矩形按钮 + v1.0.5](#矩形按钮)
     * [布局](#布局)
+       * [视图控制器 + v1.0.5](#视图控制器)
        * [涟漪布局 + v1.0.3](#涟漪布局)
 
 ## 快速开始
 
 ###### Android Studio
 在build.gradle中添加：
-
 ```xml
 dependencies {
-    compile 'io.simi:simi:1.0.4'
+    compile 'io.simi:simi:1.0.5'
 }
 ```
 ###### Eclipse
 ```xml
-1. 下载simi-v1.0.4.jar拷贝到工程目录/libs下
+1. 下载simi-v1.0.5.jar拷贝到工程目录/libs下
 2. 下载FontAwesome字体(http://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.3.0.zip)
 3. 工程目录/assets下新建目录/fonts并拷贝FontAwesome字体到fonts/下重命名为:fontawesome.ttf
 ```
@@ -259,6 +259,69 @@ dialog.setOnDismissListener(new OnDismissListener() {
 ```
 
 ####布局
+
+######视图控制器
+
+![View Controller](images/viewcontroller.png)
+使用说明：
+```xml
+1. 该布局继承于RelativeLayout，但不建议在布局内使用其他控件
+2. 该布局拥有自定义属性，使用时需要在XML的根布局下添加：xmlns:simi="http://schemas.android.com/simi"
+3. 该布局支持的自定义属性如下：
+    * simi:type="top" （导航栏位置，top上方、top_float上方且浮空、bottom下方以及bottom_float下方且浮空）
+    * simi:contentColor="#FFFFFF" （内容背景颜色）
+    * simi:navigatorColor="#1E88EF" （导航栏背景颜色）
+    * simi:textSize="16" （导航栏字号）
+    * simi:textColor="#66FFFFFF" （导航栏字体颜色）
+    * simi:indicatorColor="#66FFFFFF" （选中指示线颜色）
+    * simi:textSelectColor="#CCFFFFFF" （导航栏选中字体颜色）
+```
+XML布局使用示例
+```xml
+<io.simi.widget.ViewController
+    android:id="@+id/mViewController"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    simi:type="top"
+    simi:contentColor="#FFFFFF"
+    simi:navigatorColor="#1E88EF"
+    simi:textSize="16"
+    simi:textColor="#66FFFFFF"
+    simi:indicatorColor="#66FFFFFF"
+    simi:textSelectColor="#CCFFFFFF">
+</io.simi.widget.ViewController>
+```
+Activity代码写法：
+```xml
+private ViewController mViewController;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    mViewController = (ViewController) findViewById(R.id.mViewController);
+    mViewController.setAdapter(new PagerAdapter(getSupportFragmentManager()));
+}
+
+class PagerAdapter extends FragmentPagerAdapter {
+    private final String[] titles = { "微信", "好友", "发现", "我"};
+    public PagerAdapter(FragmentManager fm) {
+        super(fm);
+    }
+    @Override
+    public CharSequence getPageTitle(int index) {
+        return titles[index];
+    }
+    @Override
+    public int getCount() {
+        return titles.length;
+    }
+    @Override
+    public Fragment getItem(int index) {
+        return new MyFragment(index);
+    }
+}
+```
 
 ######涟漪布局
 

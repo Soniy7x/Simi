@@ -18,7 +18,7 @@ import io.simi.utils.Unit;
  * -------------------------------
  *
  * createTime: 2015-04-16
- * updateTime: 2015-04-17
+ * updateTime: 2015-04-20
  *
  */
 public class RectangleButton extends RippleView {
@@ -46,9 +46,9 @@ public class RectangleButton extends RippleView {
     public RectangleButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if (attrs != null) {
-            text = AttributeParser.parserText(getContext(), attrs, "");
-            size = AttributeParser.parseTextSize(attrs, size);
-            AttributeParser.AttributeParserResult result = AttributeParser.parseBackground(attrs, color);
+            text = AttributeParser.parserText(getContext(), AttributeParser.ANDROID_NAMESPACE, attrs, "");
+            size = AttributeParser.parseTextSize(AttributeParser.ANDROID_NAMESPACE, attrs, size);
+            AttributeParser.AttributeParserResult result = AttributeParser.parseBackground(AttributeParser.ANDROID_NAMESPACE, attrs, color);
             if (result.type == AttributeParser.TYPE_ID) {
                 try {
                     setBackgroundColor(getResources().getColor(result.intValue));
