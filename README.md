@@ -263,6 +263,7 @@ dialog.setOnDismissListener(new OnDismissListener() {
 ######视图控制器
 
 ![View Controller](images/viewcontroller.png)
+
 使用说明：
 ```xml
 1. 该布局继承于RelativeLayout，但不建议在布局内使用其他控件
