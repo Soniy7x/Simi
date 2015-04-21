@@ -4,6 +4,15 @@ import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 
+/**
+ * -------------------------------
+ * 		  RefreshRecyclerView
+ * -------------------------------
+ *
+ * createTime: 2015-04-21
+ * updateTime: 2015-04-21
+ *
+ */
 public class RefreshRecyclerView extends SwipeRefreshLayout {
 
     private RecyclerView mRecyclerView;

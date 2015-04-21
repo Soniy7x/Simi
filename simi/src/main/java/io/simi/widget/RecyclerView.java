@@ -8,6 +8,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+/**
+ * -------------------------------
+ * 		  RecyclerView
+ * -------------------------------
+ *
+ * createTime: 2015-04-21
+ * updateTime: 2015-04-21
+ *
+ */
 public class RecyclerView extends android.support.v7.widget.RecyclerView{
 
     private int pressPosition = 0;
