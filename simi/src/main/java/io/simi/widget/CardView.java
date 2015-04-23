@@ -43,4 +43,9 @@ public class CardView extends RelativeLayout{
             setBackgroundDrawable(drawable);
         }
     }
+
+    @Override
+    public void setBackgroundColor(int color) {
+        setBackgroundDrawable(new RectangleDrawable(getContext(), 2, 2, color));
+    }
 }
