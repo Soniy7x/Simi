@@ -1,12 +1,10 @@
 package io.simi.widget;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 
 /**
  * -------------------------------
@@ -14,31 +12,18 @@ import android.view.ViewConfiguration;
  * -------------------------------
  *
  * createTime: 2015-04-21
- * updateTime: 2015-04-21
+ * updateTime: 2015-04-23
  *
  */
 public class RecyclerView extends android.support.v7.widget.RecyclerView{
 
-    private int pressPosition = 0;
-    private long pressTime = 0;
-    private boolean isPressed = false;
-    private Handler itemHandler = new Handler();
+    private Adapter adapter;
+
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
     private OnLackDataListener onLackDataListener;
     private OnScrollListener onScrollListener;
-    private Runnable itemRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (isPressed && System.currentTimeMillis() - pressTime >= ViewConfiguration.getLongPressTimeout() && onItemLongClickListener != null) {
-                onItemLongClickListener.onItemLongClick(getChildAt(pressPosition), pressPosition);
-                isPressed = false;
-                itemHandler.removeCallbacks(itemRunnable);
-            }else {
-                itemHandler.postDelayed(itemRunnable, 100);
-            }
-        }
-    };
+
     private OnScrollListener onScrollDefaultListener = new OnScrollListener() {
         @Override
         public void onScrollStateChanged(android.support.v7.widget.RecyclerView recyclerView, int newState) {
@@ -76,39 +61,28 @@ public class RecyclerView extends android.support.v7.widget.RecyclerView{
 
     public RecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        super.setOnScrollListener(onScrollDefaultListener);
+        setOnScrollListener(onScrollDefaultListener);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent e) {
-        switch (e.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                isPressed = true;
-                if (onItemClickListener != null || onItemLongClickListener != null) {
-                    pressPosition = getOnClickItemPosition((int) e.getRawY());
-                    pressTime = System.currentTimeMillis();
-                }
-                if (onItemLongClickListener != null) {
-                    itemHandler.post(itemRunnable);
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                if (isPressed && onItemClickListener != null) {
-                    onItemClickListener.onItemClick(getChildAt(pressPosition), pressPosition);
-                }
-            case MotionEvent.ACTION_CANCEL:
-                isPressed = false;
-                break;
-        }
-        return super.onTouchEvent(e);
+    public void setAdapter(Adapter adapter) {
+        this.adapter = adapter;
+        this.adapter.setOnItemClickListener(onItemClickListener);
+        this.adapter.setOnItemLongClickListener(onItemLongClickListener);
+        super.setAdapter(adapter);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+        if (adapter != null) {
+            adapter.setOnItemClickListener(onItemClickListener);
+        }
     }
 
     public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
         this.onItemLongClickListener = onItemLongClickListener;
+        if (adapter != null) {
+            adapter.setOnItemLongClickListener(onItemLongClickListener);
+        }
     }
 
     public void setOnLackDataListener(OnLackDataListener onLackDataListener) {
@@ -117,22 +91,6 @@ public class RecyclerView extends android.support.v7.widget.RecyclerView{
 
     public void setOnScrollListener(OnScrollListener onScrollListener) {
         this.onScrollListener = onScrollListener;
-    }
-
-    private int getOnClickItemPosition(int y) {
-        int start = 0;
-        int end = getChildCount() - 1;
-        while (start <= end) {
-            int middle = (start + end) / 2;
-            if (y < getChildAt(middle).getHeight() * (middle + 1)) {
-                end = middle - 1;
-            }else if (y > getChildAt(middle).getHeight() * (middle + 2)) {
-                start = middle + 1;
-            }else {
-                return middle;
-            }
-        }
-        return -1;
     }
 
     public interface OnItemClickListener{
@@ -146,5 +104,64 @@ public class RecyclerView extends android.support.v7.widget.RecyclerView{
     public interface OnLackDataListener{
         public void onLackData();
         public boolean isLoading();
+    }
+
+    public static abstract class Adapter<VH extends ViewHolder> extends android.support.v7.widget.RecyclerView.Adapter<VH> {
+
+        private OnItemClickListener onItemClickListener;
+        private OnItemLongClickListener onItemLongClickListener;
+
+        @Override
+        public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+            VH viewHolder = onCreateViewHolder(parent);
+            viewHolder.setOnItemClickListener(onItemClickListener);
+            viewHolder.setOnItemLongClickListener(onItemLongClickListener);
+            return viewHolder;
+        }
+
+        public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+            this.onItemClickListener = onItemClickListener;
+        }
+
+        public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+            this.onItemLongClickListener = onItemLongClickListener;
+        }
+
+        public abstract VH onCreateViewHolder(ViewGroup parent);
+    }
+
+    public static abstract class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder implements OnClickListener, OnLongClickListener{
+
+        private OnItemClickListener onItemClickListener;
+        private OnItemLongClickListener onItemLongClickListener;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+        }
+
+        public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+            this.onItemClickListener = onItemClickListener;
+        }
+
+        public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+            this.onItemLongClickListener = onItemLongClickListener;
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(view, getAdapterPosition());
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if (onItemLongClickListener != null) {
+                onItemLongClickListener.onItemLongClick(view, getAdapterPosition());
+            }
+            return false;
+        }
     }
 }
