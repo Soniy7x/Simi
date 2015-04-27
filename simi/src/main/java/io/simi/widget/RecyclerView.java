@@ -3,6 +3,7 @@ package io.simi.widget;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -61,7 +62,7 @@ public class RecyclerView extends android.support.v7.widget.RecyclerView{
 
     public RecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        setOnScrollListener(onScrollDefaultListener);
+        super.setOnScrollListener(onScrollDefaultListener);
     }
 
     public void setAdapter(Adapter adapter) {
