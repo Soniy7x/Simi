@@ -19,11 +19,6 @@ public class HttpClient {
     protected static final int CONNECTION_TIMEOUT = 3 * 1000;
     protected static final int SOCKET_TIMEOUT = 3 * 1000;
 
-    protected static final String GET = "GET";
-    protected static final String POST = "POST";
-    protected static final String PUT = "PUT";
-    protected static final String DELETE = "DELETE";
-
     private String cookie;
     private boolean isDebugMode = false;
     private int connectionTime = CONNECTION_TIMEOUT;

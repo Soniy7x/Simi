@@ -22,4 +22,9 @@ public enum HTTP {
         this.method = method;
     }
 
+    @Override
+    public String toString() {
+        return method;
+    }
+
 }

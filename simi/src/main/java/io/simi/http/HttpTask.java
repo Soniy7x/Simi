@@ -51,7 +51,7 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
             if (!TextUtils.isEmpty(httpClient.getCookie())) {
                 connection.setRequestProperty("cookie", httpClient.getCookie());
             }
-            if (!TextUtils.isEmpty(params[2]) && (params[0].equals(HTTP.POST) || params[0].equals(HTTP.PUT))) {
+            if (!TextUtils.isEmpty(params[2]) && (params[0].equals(HTTP.POST.toString()) || params[0].equals(HTTP.PUT.toString()))) {
                 connection.setDoOutput(true);
                 PrintWriter writer = new PrintWriter(connection.getOutputStream());
                 writer.print(params[2]);
