@@ -84,6 +84,7 @@ public class ImageRoundView extends View {
         } catch (Exception e) {
             isXfermode = true;
         }
+        invalidate();
     }
 
     public void setImageResource(int resId) {
