@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.HttpRetryException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +45,7 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
     protected HttpResponseHolder doInBackground(String... params) {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(params[1]).openConnection();
+            connection.setRequestProperty("Accept-Charset", "UTF-8");
             connection.setInstanceFollowRedirects(false);
             connection.setReadTimeout(httpClient.getSocketTime());
             connection.setConnectTimeout(httpClient.getConnectionTime());

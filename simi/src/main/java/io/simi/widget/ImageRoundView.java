@@ -84,7 +84,7 @@ public class ImageRoundView extends View {
         } catch (Exception e) {
             isXfermode = true;
         }
-        invalidate();
+        setCircleMode(true);
     }
 
     public void setImageResource(int resId) {
