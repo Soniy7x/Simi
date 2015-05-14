@@ -2,6 +2,7 @@ package io.simi.widget;
 
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
 
 /**
@@ -22,10 +23,16 @@ public class RefreshRecyclerView extends SwipeRefreshLayout {
     }
 
     public RefreshRecyclerView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public RefreshRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs);
         mRecyclerView = new RecyclerView(getContext());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         addView(mRecyclerView);
     }
+
 
     public RecyclerView getConfigRecyclerView() {
         return mRecyclerView;
