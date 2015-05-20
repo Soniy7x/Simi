@@ -11,7 +11,7 @@ import android.util.AttributeSet;
  * -------------------------------
  *
  * createTime: 2015-04-21
- * updateTime: 2015-04-21
+ * updateTime: 2015-05-20
  *
  */
 public class RefreshRecyclerView extends SwipeRefreshLayout {
@@ -42,7 +42,7 @@ public class RefreshRecyclerView extends SwipeRefreshLayout {
         mRecyclerView.setLayoutManager(layout);
     }
 
-    public void setAdapter(android.support.v7.widget.RecyclerView.Adapter adapter) {
+    public void setAdapter(RecyclerView.Adapter adapter) {
         mRecyclerView.setAdapter(adapter);
     }
 
