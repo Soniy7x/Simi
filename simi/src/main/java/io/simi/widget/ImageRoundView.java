@@ -27,7 +27,7 @@ import io.simi.utils.Unit;
  * -------------------------------
  *
  * createTime: 2015-04-20
- * updateTime: 2015-04-20
+ * updateTime: 2015-05-26
  *
  */
 public class ImageRoundView extends View {
@@ -84,7 +84,7 @@ public class ImageRoundView extends View {
         } catch (Exception e) {
             isXfermode = true;
         }
-        setCircleMode(true);
+        invalidate();
     }
 
     public void setImageResource(int resId) {

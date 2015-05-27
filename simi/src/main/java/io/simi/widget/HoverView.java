@@ -3,6 +3,7 @@ package io.simi.widget;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
@@ -94,7 +95,7 @@ public class HoverView extends FrameLayout implements AbsListView.OnScrollListen
             onHoverStatusListener.isHover(translationY <= -mHeaderTitleLayout.getHeight());
 		}
         if (onLackDataListener != null) {
-            if (visibleItemCount >= totalItemCount - 4 && !onLackDataListener.isLoading()) {
+            if (firstVisibleItem >= totalItemCount - 1 - onLackDataListener.minNumber() && !onLackDataListener.isLoading()) {
                 onLackDataListener.onLackData();
             }
         }
@@ -175,5 +176,6 @@ public class HoverView extends FrameLayout implements AbsListView.OnScrollListen
     public interface OnLackDataListener{
         public void onLackData();
         public boolean isLoading();
+        public int minNumber();
     }
 }
