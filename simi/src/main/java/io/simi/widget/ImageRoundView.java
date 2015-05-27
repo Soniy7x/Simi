@@ -66,13 +66,13 @@ public class ImageRoundView extends View {
         if (attrs == null) {
             return;
         }
-        int resId = AttributeParser.parserSrc(AttributeParser.ANDROID_NAMESPACE, attrs);
-        if (resId == -1) {
-            return;
-        }
         isCircleMode = AttributeParser.parserCircleMode(AttributeParser.SIMI_NAMESPACE, attrs);
         if (!isCircleMode) {
             radius = AttributeParser.parserRadius(AttributeParser.SIMI_NAMESPACE, attrs);
+        }
+        int resId = AttributeParser.parserSrc(AttributeParser.ANDROID_NAMESPACE, attrs);
+        if (resId == -1) {
+            return;
         }
         setImageBitmap(BitmapFactory.decodeResource(getResources(), resId));
     }
