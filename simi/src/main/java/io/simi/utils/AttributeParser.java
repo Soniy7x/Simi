@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 
 /**
  * -------------------------------
@@ -182,7 +183,11 @@ public class AttributeParser {
     }
 
     public static int parseTextSize(String namespace, AttributeSet attrs, int defaultTextSize) {
-        return attrs.getAttributeIntValue(namespace, "textSize", defaultTextSize);
+        String textSize = attrs.getAttributeValue(namespace, "textSize");
+        if (TextUtils.isEmpty(textSize) || !textSize.contains("sp")) {
+            return defaultTextSize;
+        }
+        return Float.valueOf(textSize.replace("sp", "").trim()).intValue();
     }
 
     public static AttributeParserResult parseBackground(String namespace, AttributeSet attrs, int defaultColor) {
