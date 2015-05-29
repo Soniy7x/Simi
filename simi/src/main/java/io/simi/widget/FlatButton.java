@@ -79,10 +79,12 @@ public class FlatButton extends RippleView {
     @Override
     public void setBackgroundColor(int color) {
         this.color = color;
+        invalidate();
     }
 
     public void setText(String text) {
         this.text = text;
+        invalidate();
     }
 
     public String getText() {
@@ -95,6 +97,7 @@ public class FlatButton extends RippleView {
 
     public void setTextSize(int size) {
         this.textSize = size;
+        invalidate();
     }
 
     @Override

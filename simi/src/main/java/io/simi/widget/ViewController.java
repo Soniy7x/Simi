@@ -118,4 +118,8 @@ public class ViewController extends RelativeLayout{
     public void setIndicatorColor(int color) {
         mNavigator.setIndicatorColor(color);
     }
+
+    public void setBackgroundColor(int color) {
+        mNavigator.setBackgroundColor(color);
+    }
 }

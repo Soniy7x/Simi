@@ -65,6 +65,7 @@ public class RectangleButton extends RippleView {
 
     public void setText(String text) {
         this.text = text;
+        invalidate();
     }
 
     public String getText() {
@@ -73,6 +74,7 @@ public class RectangleButton extends RippleView {
 
     public void setTextSize(int size) {
         this.size = size;
+        invalidate();
     }
 
     public int getBackgroundColor() {
@@ -83,6 +85,7 @@ public class RectangleButton extends RippleView {
     public void setBackgroundColor(int color) {
         this.color = color;
         super.setBackgroundDrawable(new RectangleDrawable(getContext(), 2 , 2, color));
+        invalidate();
     }
 
     @Override
