@@ -64,6 +64,11 @@ public class RecyclerView extends android.support.v7.widget.RecyclerView{
         super.setOnScrollListener(onScrollDefaultListener);
     }
 
+    @Override
+    public void setAdapter(android.support.v7.widget.RecyclerView.Adapter adapter) {
+        throw new RuntimeException("You should change android.support.v7.widget.RecyclerView.Adapter to io.simi.widget.RecyclerView.Adapter!");
+    }
+
     public void setAdapter(Adapter adapter) {
         this.adapter = adapter;
         this.adapter.setOnItemClickListener(onItemClickListener);

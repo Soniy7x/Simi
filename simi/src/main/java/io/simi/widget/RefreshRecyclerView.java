@@ -33,7 +33,6 @@ public class RefreshRecyclerView extends SwipeRefreshLayout {
         addView(mRecyclerView);
     }
 
-
     public RecyclerView getConfigRecyclerView() {
         return mRecyclerView;
     }
