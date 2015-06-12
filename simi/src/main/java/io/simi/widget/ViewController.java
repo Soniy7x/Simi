@@ -53,6 +53,7 @@ public class ViewController extends RelativeLayout{
             mNavigator.setTextColor(AttributeParser.parseTextColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0x66FFFFFF));
             mNavigator.setTextSelectColor(AttributeParser.parseTextSelectColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0xFFFFFFFF));
             mNavigator.setIndicatorColor(AttributeParser.parseIndicatorColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0x66FFFFFF));
+            mNavigator.setUnderLineColor(AttributeParser.parseUnderLineColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0x66FFFFFF));
         }else {
             mNavigator.setBackgroundColor(0xFF1E88EF);
             mViewPager.setBackgroundColor(0xFFFFFFFF);
@@ -60,6 +61,7 @@ public class ViewController extends RelativeLayout{
             mNavigator.setTextColor(0x66FFFFFF);
             mNavigator.setTextSelectColor(0xFFFFFFFF);
             mNavigator.setIndicatorColor(0x66FFFFFF);
+            mNavigator.setUnderLineColor(0x66FFFFFF);
         }
         addView(mViewPager);
         addView(mNavigator);

@@ -168,6 +168,29 @@ public class AttributeParser {
         }
     }
 
+    public static int parseUnderLineColor(Context context, String namespace, AttributeSet attrs, int defaultColor) {
+        int resId = attrs.getAttributeResourceValue(namespace, "underLineColor", FAILED);
+        if (resId != FAILED) {
+            try {
+                return  context.getResources().getColor(resId);
+            }catch (Exception e) {
+                return defaultColor;
+            }
+        }else {
+            int color = attrs.getAttributeIntValue(namespace, "underLineColor", FAILED);
+            if (color != FAILED) {
+                return color;
+            }else {
+                String colorString = attrs.getAttributeValue(namespace, "underLineColor");
+                if (TextUtils.isEmpty(colorString)) {
+                    return defaultColor;
+                }else {
+                    return Color.parseColor(colorString);
+                }
+            }
+        }
+    }
+
     public static String parserText(Context context, String namespace, AttributeSet attrs, String defaultText) {
         int resId = attrs.getAttributeResourceValue(namespace, "text", FAILED);
         if (resId != FAILED) {

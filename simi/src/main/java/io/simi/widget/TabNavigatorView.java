@@ -3,7 +3,10 @@ package io.simi.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -14,6 +17,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import io.simi.utils.AttributeParser;
 import io.simi.utils.Unit;
 
 /**
@@ -36,6 +40,7 @@ public class TabNavigatorView extends HorizontalScrollView{
     private int mTextColor = 0x66FFFFFF;
     private int mSelectedTextColor = 0xCCFFFFFF;
     private int mIndicatorColor = 0x66FFFFFF;
+    private int mUnderLineColor = 0x66FFFFFF;
 
     private int mLastScrollX = 0;
 
@@ -73,6 +78,22 @@ public class TabNavigatorView extends HorizontalScrollView{
         addView(mContainer);
 
         DP = Unit.dp2px(getContext(), 1);
+
+        if (attrs != null) {
+            setBackgroundColor(AttributeParser.parseNavigatorColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0xFF1E88EF));
+            setTextSize(AttributeParser.parseTextSize(AttributeParser.SIMI_NAMESPACE, attrs, 16));
+            setTextColor(AttributeParser.parseTextColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0x66FFFFFF));
+            setTextSelectColor(AttributeParser.parseTextSelectColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0xFFFFFFFF));
+            setIndicatorColor(AttributeParser.parseIndicatorColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0x66FFFFFF));
+            setUnderLineColor(AttributeParser.parseUnderLineColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0x66FFFFFF));
+        }else {
+            setBackgroundColor(0xFF1E88EF);
+            setTextSize(16);
+            setTextColor(0x66FFFFFF);
+            setTextSelectColor(0xFFFFFFFF);
+            setIndicatorColor(0x66FFFFFF);
+            setUnderLineColor(0x66FFFFFF);
+        }
     }
 
     public void setViewPager(ViewPager viewPager) {
@@ -87,8 +108,14 @@ public class TabNavigatorView extends HorizontalScrollView{
     public void notifyDataSetChanged() {
         mContainer.removeAllViews();
         mCount = mViewPager.getAdapter().getCount();
+        TabNavigatorAdapter adapter;
+        try {
+            adapter = (TabNavigatorAdapter) mViewPager.getAdapter();
+        }catch (Exception e) {
+            throw new RuntimeException("TabNavigatorView must be use TabNavigatorAdapter！");
+        }
         for (int i = 0; i < mCount; i++) {
-            addTabWithText(i, mViewPager.getAdapter().getPageTitle(i).toString());
+            addTabWithText(i, adapter.getPageTitle(i).toString(), adapter.getPageIcon(i));
         }
         updateView();
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -96,7 +123,7 @@ public class TabNavigatorView extends HorizontalScrollView{
             public void onGlobalLayout() {
                 if (Build.VERSION.SDK_INT >= 16) {
                     getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }else {
+                } else {
                     getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
                 mCurrentPosition = mViewPager.getCurrentItem();
@@ -105,7 +132,7 @@ public class TabNavigatorView extends HorizontalScrollView{
         });
     }
 
-    private void addTabWithText(final int position, String text) {
+    private void addTabWithText(final int position, String text, Drawable icon) {
         TextView tab = new TextView(getContext());
         tab.setText(text);
         tab.setGravity(Gravity.CENTER);
@@ -117,7 +144,11 @@ public class TabNavigatorView extends HorizontalScrollView{
                 mViewPager.setCurrentItem(position);
             }
         });
-        tab.setPadding(24 * DP, 0, 24 * DP, 0);
+        if (icon != null) {
+            icon.setBounds(0, 0, icon.getMinimumWidth(), icon.getMinimumHeight());
+            tab.setCompoundDrawables(null, icon, null, null);
+        }
+//        tab.setPadding(24 * DP, 0, 24 * DP, 0);
         mContainer.addView(tab, position, mExpandedLayoutParams);
     }
 
@@ -157,6 +188,8 @@ public class TabNavigatorView extends HorizontalScrollView{
             return;
         }
         final int height = getHeight();
+        mPaint.setColor(mUnderLineColor);
+        canvas.drawRect(0, height - 1F * DP, getWidth(), height, mPaint);
         mPaint.setColor(mIndicatorColor);
         View currentTab = mContainer.getChildAt(mCurrentPosition);
         float indicatorLeft = currentTab.getLeft();
@@ -229,4 +262,19 @@ public class TabNavigatorView extends HorizontalScrollView{
         updateView();
     }
 
+    public void setUnderLineColor(int mUnderLineColor) {
+        this.mUnderLineColor = mUnderLineColor;
+        updateView();
+    }
+
+    public static abstract class TabNavigatorAdapter extends FragmentPagerAdapter {
+
+        public TabNavigatorAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public abstract CharSequence getPageTitle(int position);
+        public abstract Drawable getPageIcon(int position);
+    }
 }
