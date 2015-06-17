@@ -3,6 +3,7 @@ package io.simi.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
@@ -48,6 +49,7 @@ public class TabNavigatorView extends HorizontalScrollView{
     private int mSelectedPosition = 0;
     private float mCurrentPositionOffset = 0;
 
+    private Typeface typeface;
     private Paint mPaint;
     private LinearLayout.LayoutParams mExpandedLayoutParams;
     private ViewPager.OnPageChangeListener onCustomerPageChangeListener;
@@ -144,11 +146,13 @@ public class TabNavigatorView extends HorizontalScrollView{
                 mViewPager.setCurrentItem(position);
             }
         });
+        if (typeface != null) {
+            tab.setTypeface(typeface);
+        }
         if (icon != null) {
             icon.setBounds(0, 0, icon.getMinimumWidth(), icon.getMinimumHeight());
             tab.setCompoundDrawables(null, icon, null, null);
         }
-//        tab.setPadding(24 * DP, 0, 24 * DP, 0);
         mContainer.addView(tab, position, mExpandedLayoutParams);
     }
 
@@ -158,6 +162,9 @@ public class TabNavigatorView extends HorizontalScrollView{
             if (childView instanceof  TextView) {
                 TextView tab = (TextView) childView;
                 tab.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTextSize);
+                if (typeface != null) {
+                    tab.setTypeface(typeface);
+                }
                 if (i == mSelectedPosition) {
                     tab.setTextColor(mSelectedTextColor);
                 }else {
@@ -264,6 +271,11 @@ public class TabNavigatorView extends HorizontalScrollView{
 
     public void setUnderLineColor(int mUnderLineColor) {
         this.mUnderLineColor = mUnderLineColor;
+        updateView();
+    }
+
+    public void setTypeface(Typeface typeface) {
+        this.typeface = typeface;
         updateView();
     }
 
