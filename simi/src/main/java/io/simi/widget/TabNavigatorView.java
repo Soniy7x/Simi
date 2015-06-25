@@ -82,19 +82,19 @@ public class TabNavigatorView extends HorizontalScrollView{
         DP = Unit.dp2px(getContext(), 1);
 
         if (attrs != null) {
-            setBackgroundColor(AttributeParser.parseNavigatorColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0xFF1E88EF));
-            setTextSize(AttributeParser.parseTextSize(AttributeParser.SIMI_NAMESPACE, attrs, 16));
-            setTextColor(AttributeParser.parseTextColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0x66FFFFFF));
-            setTextSelectColor(AttributeParser.parseTextSelectColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0xFFFFFFFF));
-            setIndicatorColor(AttributeParser.parseIndicatorColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0x66FFFFFF));
-            setUnderLineColor(AttributeParser.parseUnderLineColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0x66FFFFFF));
+            setBackgroundColor(AttributeParser.parseNavigatorColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0xFFFFFFFF));
+            setTextSize(AttributeParser.parseTextSize(AttributeParser.SIMI_NAMESPACE, attrs, 15));
+            setTextColor(AttributeParser.parseTextColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0xFF6A6A6A));
+            setTextSelectColor(AttributeParser.parseTextSelectColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0xFF009EFC));
+            setIndicatorColor(AttributeParser.parseIndicatorColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0xFFE8E8E8));
+            setUnderLineColor(AttributeParser.parseUnderLineColor(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, 0xFF009EFC));
         }else {
-            setBackgroundColor(0xFF1E88EF);
-            setTextSize(16);
-            setTextColor(0x66FFFFFF);
-            setTextSelectColor(0xFFFFFFFF);
-            setIndicatorColor(0x66FFFFFF);
-            setUnderLineColor(0x66FFFFFF);
+            setBackgroundColor(0xFFFFFFFF);
+            setTextSize(15);
+            setTextColor(0xFF6A6A6A);
+            setTextSelectColor(0xFF009EFC);
+            setIndicatorColor(0xFFE8E8E8);
+            setUnderLineColor(0xFF009EFC);
         }
     }
 

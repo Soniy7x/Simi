@@ -40,11 +40,11 @@ public class AttributeParser {
     }
 
     public static String parserType(Context context, String namespace, AttributeSet attrs, String defaultText) {
-        int resId = attrs.getAttributeResourceValue(namespace, "text", FAILED);
+        int resId = attrs.getAttributeResourceValue(namespace, "type", FAILED);
         if (resId != FAILED) {
             return context.getResources().getString(resId);
         }else {
-            String text = attrs.getAttributeValue(namespace, "text");
+            String text = attrs.getAttributeValue(namespace, "type");
             if (TextUtils.isEmpty(text)) {
                 return defaultText;
             } else {
