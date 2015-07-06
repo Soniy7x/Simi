@@ -50,6 +50,11 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
             connection.setReadTimeout(httpClient.getSocketTime());
             connection.setConnectTimeout(httpClient.getConnectionTime());
             connection.setRequestMethod(params[0]);
+            if (httpClient.getHeaderFields().size() > 0) {
+                for (Map.Entry<String, String> entry : httpClient.getHeaderFields().entrySet()) {
+                    connection.setRequestProperty(entry.getKey(), entry.getValue());
+                }
+            }
             if (!TextUtils.isEmpty(httpClient.getCookie())) {
                 connection.setRequestProperty("cookie", httpClient.getCookie());
             }

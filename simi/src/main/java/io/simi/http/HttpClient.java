@@ -1,5 +1,6 @@
 package io.simi.http;
 
+import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
 import io.simi.listener.OnHttpResponseListener;
@@ -23,6 +24,7 @@ public class HttpClient {
     private boolean isDebugMode = false;
     private int connectionTime = CONNECTION_TIMEOUT;
     private int socketTime = SOCKET_TIMEOUT;
+    private ArrayMap<String, String> mHeaderFields = new ArrayMap<>();
 
     private static HttpClient instance;
 
@@ -80,5 +82,9 @@ public class HttpClient {
 
     public void setSocketTime(int socketTime) {
         this.socketTime = socketTime;
+    }
+
+    public ArrayMap<String, String> getHeaderFields() {
+        return mHeaderFields;
     }
 }
