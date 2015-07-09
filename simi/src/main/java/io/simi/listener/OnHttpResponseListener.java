@@ -13,6 +13,7 @@ public interface OnHttpResponseListener {
 
     public void onSuccess(String response);
     public void onFailure(int responseCode, Exception exception);
+    public void onError(Exception exception);
     public void onStart();
     public void onFinish();
 

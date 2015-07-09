@@ -108,7 +108,7 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
                 Log.v(TAG, "响应标识：无");
                 Log.v(TAG, "异常信息：" + e.toString());
             }
-            return new HttpResponseHolder(502, e);
+            return new HttpResponseHolder(505, e);
         }
     }
 
@@ -122,7 +122,11 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
     protected void onPostExecute(HttpResponseHolder httpResponseHolder) {
         super.onPostExecute(httpResponseHolder);
         if (TextUtils.isEmpty(httpResponseHolder.getResponse())) {
-            httpResponseListener.onFailure(httpResponseHolder.getResponseCode(), httpResponseHolder.getException());
+            if (httpResponseHolder.getResponseCode() == 505) {
+                httpResponseListener.onError(httpResponseHolder.getException());
+            } else {
+                httpResponseListener.onFailure(httpResponseHolder.getResponseCode(), httpResponseHolder.getException());
+            }
         }else {
             httpResponseListener.onSuccess(httpResponseHolder.getResponse());
         }
