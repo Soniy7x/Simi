@@ -29,12 +29,12 @@
 在build.gradle中添加：
 ```xml
 dependencies {
-    compile 'io.simi:simi:1.2.9'
+    compile 'io.simi:simi:1.3.0'
 }
 ```
 ###### Eclipse
 ```xml
-1. 下载simi-v1.2.9.jar拷贝到工程目录/libs下
+1. 下载simi-v1.3.0.jar拷贝到工程目录/libs下
 2. 下载FontAwesome字体(http://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.3.0.zip)
 3. 工程目录/assets下新建目录/fonts并拷贝FontAwesome字体到fonts/下重命名为:fontawesome.ttf
 ```

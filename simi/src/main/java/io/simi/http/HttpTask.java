@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 import java.net.HttpRetryException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -75,7 +74,7 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
                     Log.v(TAG, "响应标识：" + responseCode);
                     Log.v(TAG, "返回内容：" + connection.getResponseMessage());
                 }
-                return new HttpResponseHolder(new HttpRetryException(connection.getResponseMessage(), responseCode));
+                return new HttpResponseHolder(responseCode, new HttpRetryException(connection.getResponseMessage(), responseCode));
             }
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
             StringBuilder response = new StringBuilder();
@@ -101,7 +100,15 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
             }
             return new HttpResponseHolder(response.toString());
         } catch (Exception e) {
-            return new HttpResponseHolder(e);
+            if (httpClient.isDebugMode()) {
+                Log.v(TAG, "于" + new SimpleDateFormat("HH时mm分ss秒", Locale.CHINESE).format(new Date()) + "发起异步网络访问");
+                Log.v(TAG, "接口地址：" + params[1]);
+                Log.v(TAG, "访问方式：" + params[0]);
+                Log.v(TAG, "传递参数：" + (TextUtils.isEmpty(params[2]) ? "" : params[2]));
+                Log.v(TAG, "响应标识：无");
+                Log.v(TAG, "异常信息：" + e.toString());
+            }
+            return new HttpResponseHolder(502, e);
         }
     }
 
@@ -115,7 +122,7 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
     protected void onPostExecute(HttpResponseHolder httpResponseHolder) {
         super.onPostExecute(httpResponseHolder);
         if (TextUtils.isEmpty(httpResponseHolder.getResponse())) {
-            httpResponseListener.onFailure(httpResponseHolder.getException());
+            httpResponseListener.onFailure(httpResponseHolder.getResponseCode(), httpResponseHolder.getException());
         }else {
             httpResponseListener.onSuccess(httpResponseHolder.getResponse());
         }

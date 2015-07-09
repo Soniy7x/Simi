@@ -12,7 +12,7 @@ package io.simi.listener;
 public interface OnHttpResponseListener {
 
     public void onSuccess(String response);
-    public void onFailure(Exception exception);
+    public void onFailure(int responseCode, Exception exception);
     public void onStart();
     public void onFinish();
 

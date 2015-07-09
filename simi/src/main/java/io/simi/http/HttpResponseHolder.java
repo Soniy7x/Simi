@@ -12,14 +12,20 @@ package io.simi.http;
 public class HttpResponseHolder {
 
     private String response;
+    private int responseCode;
     private Exception exception;
 
     public HttpResponseHolder(String response) {
         this.response = response;
     }
 
-    public HttpResponseHolder(Exception exception) {
+    public HttpResponseHolder(int responseCode, Exception exception) {
+        this.responseCode = responseCode;
         this.exception = exception;
+    }
+
+    public int getResponseCode() {
+        return responseCode;
     }
 
     public String getResponse() {
