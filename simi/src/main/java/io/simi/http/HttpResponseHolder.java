@@ -13,15 +13,14 @@ public class HttpResponseHolder {
 
     private String response;
     private int responseCode;
-    private Exception exception;
 
     public HttpResponseHolder(String response) {
         this.response = response;
     }
 
-    public HttpResponseHolder(int responseCode, Exception exception) {
+    public HttpResponseHolder(int responseCode, String response) {
         this.responseCode = responseCode;
-        this.exception = exception;
+        this.response = response;
     }
 
     public int getResponseCode() {
@@ -32,7 +31,4 @@ public class HttpResponseHolder {
         return response;
     }
 
-    public Exception getException() {
-        return exception;
-    }
 }

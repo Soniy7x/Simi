@@ -7,7 +7,6 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.HttpRetryException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -65,50 +64,56 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
                 writer.close();
             }
             int responseCode = connection.getResponseCode();
-            if (responseCode > 300) {
-                if (httpClient.isDebugMode()) {
-                    Log.v(TAG, "于" + new SimpleDateFormat("HH时mm分ss秒", Locale.CHINESE).format(new Date()) + "发起异步网络访问");
-                    Log.v(TAG, "接口地址：" + params[1]);
-                    Log.v(TAG, "访问方式：" + params[0]);
-                    Log.v(TAG, "传递参数：" + (TextUtils.isEmpty(params[2]) ? "" : params[2]));
-                    Log.v(TAG, "响应标识：" + responseCode);
-                    Log.v(TAG, "返回内容：" + connection.getResponseMessage());
-                }
-                return new HttpResponseHolder(responseCode, new HttpRetryException(connection.getResponseMessage(), responseCode));
-            }
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
             StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                response.append(line).append("\n");
-            }
-            reader.close();
-            Map<String, List<String>> map = connection.getHeaderFields();
-            if (map != null && map.containsKey("Set-Cookie")) {
-                String cookie = map.get("Set-Cookie").get(0);
-                if (!TextUtils.isEmpty(cookie)) {
-                    httpClient.setCookie(cookie.substring(0, cookie.indexOf(";")));
+            if (responseCode > 300) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getErrorStream(), "utf-8"));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line).append("\n");
+                }
+                reader.close();
+            } else {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line).append("\n");
+                }
+                reader.close();
+                Map<String, List<String>> map = connection.getHeaderFields();
+                if (map != null && map.containsKey("Set-Cookie")) {
+                    String cookie = map.get("Set-Cookie").get(0);
+                    if (!TextUtils.isEmpty(cookie)) {
+                        httpClient.setCookie(cookie.substring(0, cookie.indexOf(";")));
+                    }
                 }
             }
             if (httpClient.isDebugMode()) {
-                Log.v(TAG, "于" + new SimpleDateFormat("HH时mm分ss秒", Locale.CHINESE).format(new Date()) + "发起异步网络访问");
+                Log.v(TAG, "---------------------------------------------------------------------");
+                Log.v(TAG, "请求时间：" + new SimpleDateFormat("HH时mm分ss秒", Locale.CHINESE).format(new Date()) + "发起异步网络访问");
                 Log.v(TAG, "接口地址：" + params[1]);
                 Log.v(TAG, "访问方式：" + params[0]);
                 Log.v(TAG, "传递参数：" + (TextUtils.isEmpty(params[2]) ? "" : params[2]));
                 Log.v(TAG, "响应标识：" + responseCode);
                 Log.v(TAG, "返回内容：" + response.toString());
+                Log.v(TAG, "---------------------------------------------------------------------");
             }
-            return new HttpResponseHolder(response.toString());
+            if (responseCode > 300) {
+                return new HttpResponseHolder(responseCode, response.toString());
+            } else {
+                return new HttpResponseHolder(response.toString());
+            }
         } catch (Exception e) {
             if (httpClient.isDebugMode()) {
-                Log.v(TAG, "于" + new SimpleDateFormat("HH时mm分ss秒", Locale.CHINESE).format(new Date()) + "发起异步网络访问");
+                Log.v(TAG, "---------------------------------------------------------------------");
+                Log.v(TAG, "请求时间：" + new SimpleDateFormat("HH时mm分ss秒", Locale.CHINESE).format(new Date()) + "发起异步网络访问");
                 Log.v(TAG, "接口地址：" + params[1]);
                 Log.v(TAG, "访问方式：" + params[0]);
                 Log.v(TAG, "传递参数：" + (TextUtils.isEmpty(params[2]) ? "" : params[2]));
                 Log.v(TAG, "响应标识：无");
                 Log.v(TAG, "异常信息：" + e.toString());
+                Log.v(TAG, "---------------------------------------------------------------------");
             }
-            return new HttpResponseHolder(505, e);
+            return new HttpResponseHolder(505, e.toString());
         }
     }
 
@@ -123,9 +128,9 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
         super.onPostExecute(httpResponseHolder);
         if (TextUtils.isEmpty(httpResponseHolder.getResponse())) {
             if (httpResponseHolder.getResponseCode() == 505) {
-                httpResponseListener.onError(httpResponseHolder.getException());
+                httpResponseListener.onError(new Exception(httpResponseHolder.getResponse()));
             } else {
-                httpResponseListener.onFailure(httpResponseHolder.getResponseCode(), httpResponseHolder.getException());
+                httpResponseListener.onFailure(httpResponseHolder.getResponseCode(), httpResponseHolder.getResponse());
             }
         }else {
             httpResponseListener.onSuccess(httpResponseHolder.getResponse());
