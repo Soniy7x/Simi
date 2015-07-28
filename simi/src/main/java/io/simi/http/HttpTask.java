@@ -41,6 +41,7 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
 
     @Override
     protected HttpResponseHolder doInBackground(String... params) {
+        int responseCode = 0;
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(params[1]).openConnection();
             connection.setRequestProperty("Accept-Charset", "UTF-8");
@@ -63,7 +64,7 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
                 writer.flush();
                 writer.close();
             }
-            int responseCode = connection.getResponseCode();
+            responseCode = connection.getResponseCode();
             StringBuilder response = new StringBuilder();
             if (responseCode > 300) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getErrorStream(), "utf-8"));
@@ -109,7 +110,7 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
                 Log.v(TAG, "接口地址：" + params[1]);
                 Log.v(TAG, "访问方式：" + params[0]);
                 Log.v(TAG, "传递参数：" + (TextUtils.isEmpty(params[2]) ? "" : params[2]));
-                Log.v(TAG, "响应标识：无");
+                Log.v(TAG, "响应标识：" + responseCode);
                 Log.v(TAG, "异常信息：" + e.toString());
                 Log.v(TAG, "---------------------------------------------------------------------");
             }
@@ -126,7 +127,7 @@ public class HttpTask extends AsyncTask<String, Void, HttpResponseHolder>{
     @Override
     protected void onPostExecute(HttpResponseHolder httpResponseHolder) {
         super.onPostExecute(httpResponseHolder);
-        if (TextUtils.isEmpty(httpResponseHolder.getResponse())) {
+        if (httpResponseHolder.getResponseCode() != 0) {
             if (httpResponseHolder.getResponseCode() == 505) {
                 httpResponseListener.onError(new Exception(httpResponseHolder.getResponse()));
             } else {
