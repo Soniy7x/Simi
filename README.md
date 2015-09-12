@@ -13,7 +13,6 @@
        * [字符处理](#字符处理)
 * [UI](#UI)
     * [对话框](#对话框)
-       * [警告框](#警告框)
        * [简单对话框](#简单对话框)
     * [组件](#组件)
        * [平面按钮](#平面按钮)
@@ -29,14 +28,12 @@
 在build.gradle中添加：
 ```xml
 dependencies {
-    compile 'io.simi:simi:1.3.3'
+    compile 'io.simi:simi:1.3.4'
 }
 ```
 ###### Eclipse
 ```xml
-1. 下载simi-v1.3.3.jar拷贝到工程目录/libs下
-2. 下载FontAwesome字体(http://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.3.0.zip)
-3. 工程目录/assets下新建目录/fonts并拷贝FontAwesome字体到fonts/下重命名为:fontawesome.ttf
+下载simi-v1.3.4.jar拷贝到工程目录/libs下
 ```
 
 ##API
@@ -185,28 +182,6 @@ StringUtils.isNumber(string);
 ##UI
 
 ####对话框
-
-######警告框
-
-![Warning Dialog](images/warningdialog.png)
-```xml
-//LEVEL:VERBOSE, INFO, WARNING, ERROR, CUSTOMER
-new WarningDialog(this, LEVEL.INFO, "恭喜", "主角等级提升１级！", "了解").show;
-
-//如果想要监听Dismiss
-new WarningDialog(this, LEVEL.INFO, "恭喜", "主角等级提升１级！", "了解", new OnDismissListener() {
-   @Override
-   public void onDismiss() {
-      //to do something...
-   }
-}).show;
-
-//当然也可以选择自定义
-WarningDialog dialog = new WarningDialog(this, LEVEL.CUSTOMER, "恭喜", "主角等级提升１级！", "了解");
-dialog.setCustomerType(FONT_AWESOME.FA_CHECK, 0xFF009EFC);
-dialog.show();
-```
-######注：具体支持的图标请转到Font Awesome Icon(http://fortawesome.github.io/Font-Awesome/icons/#new)
 
 ######简单对话框
 

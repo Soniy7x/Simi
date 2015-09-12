@@ -25,9 +25,8 @@ public class ViewController extends RelativeLayout{
     public static final String TYPE_TOP_FLOAT = "top_float";
     public static final String TYPE_BOTTOM_FLOAT = "bottom_float";
 
-    private TabNavigatorView mNavigator;
-    private ViewPager mViewPager;
-    private ViewPager.OnPageChangeListener onPageChangeListener;
+    private NavigatorView mNavigator;
+    private FlexibleViewPager mViewPager;
 
     private String mType = TYPE_TOP;
 
@@ -41,9 +40,9 @@ public class ViewController extends RelativeLayout{
 
     public ViewController(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mNavigator = new TabNavigatorView(getContext());
+        mNavigator = new NavigatorView(getContext());
         mNavigator.setId(Unit.generateViewId());
-        mViewPager = new ViewPager(getContext());
+        mViewPager = new FlexibleViewPager(getContext());
         mViewPager.setId(Unit.generateViewId());
         if (attrs != null) {
             mType = AttributeParser.parserType(getContext(), AttributeParser.SIMI_NAMESPACE, attrs, TYPE_TOP);
@@ -78,8 +77,11 @@ public class ViewController extends RelativeLayout{
     }
 
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
-        this.onPageChangeListener = onPageChangeListener;
         mNavigator.setOnPageChangeListener(onPageChangeListener);
+    }
+
+    public void setFlexible(boolean isFlexible) {
+        mViewPager.setFlexible(isFlexible);
     }
 
     private void updateView() {

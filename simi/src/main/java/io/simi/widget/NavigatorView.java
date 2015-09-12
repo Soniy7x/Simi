@@ -30,7 +30,7 @@ import io.simi.utils.Unit;
  * updateTime: 2015-04-20
  *
  */
-public class TabNavigatorView extends HorizontalScrollView{
+public class NavigatorView extends HorizontalScrollView{
 
     private LinearLayout mContainer;
     private ViewPager mViewPager;
@@ -60,15 +60,15 @@ public class TabNavigatorView extends HorizontalScrollView{
         mExpandedLayoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1F);
     }
 
-    public TabNavigatorView(Context context) {
+    public NavigatorView(Context context) {
         this(context, null);
     }
 
-    public TabNavigatorView(Context context, AttributeSet attrs) {
+    public NavigatorView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TabNavigatorView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public NavigatorView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         setFillViewport(true);
